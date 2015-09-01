@@ -106,14 +106,16 @@ class NotificationHook < Redmine::Hook::Listener
 
   def send_message(data)
     Rails.logger.info "Sending message to HipChat: #{data[:text]}"
-    uri = URI("http://vhchat.hs.uab.edu/v2/room/#{data[:room]}/notification?auth_token=#{data[:token]}")
+    uri = URI("http://vhchat.hs.uab.edu/v2/room/1/notification?auth_token=fe6b22dca7e00b0b8ff323b6b4dbd3")
     http = Net::HTTP.new(uri.host, uri.port)
+    http.use_ssl = false
+    http.verify_mode = OpenSSL::SSL::VERIFY_NONE
     req = Net::HTTP::Post.new(uri.path, initheader = {'Content-Type' => 'application/json'})
     req.body = {
       color: 'green',
       message: data[:text],
       notify: data[:notify] ? 1 : 0,
-      mesage_form: 'text'
+      message_format: 'text'
     }.to_json
     begin
       http.start do |connection|
