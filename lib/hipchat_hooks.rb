@@ -106,17 +106,17 @@ class NotificationHook < Redmine::Hook::Listener
 
   def send_message(data)
     Rails.logger.info "Sending message to HipChat: #{data[:text]}"
-    req = Net::HTTP::Post.new("/v1/rooms/message")
+    req = Net::HTTP::Post.new("v2/room/1/notification")
     req.set_form_data({
       :auth_token => data[:token],
-      :room_id => data[:room],
+      :color => 'green',
+      :message => data[:text],
       :notify => data[:notify] ? 1 : 0,
-      :from => 'Redmine',
-      :message => data[:text]
+      :message_form => 'text'
     })
     req["Content-Type"] = 'application/x-www-form-urlencoded'
 
-    http = Net::HTTP.new("api.hipchat.com", 443)
+    http = Net::HTTP.new("https://vhchat.hs.uab.edu", 443)
     http.use_ssl = true
     http.verify_mode = OpenSSL::SSL::VERIFY_NONE
     begin
