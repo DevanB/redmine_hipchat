@@ -106,9 +106,8 @@ class NotificationHook < Redmine::Hook::Listener
 
   def send_message(data)
     Rails.logger.info "Sending message to HipChat: #{data[:text]}"
-    req = Net::HTTP::Post.new("v2/room/1/notification")
+    req = Net::HTTP::Post.new("v2/room/1/notification?auth_token=R6TEMGibZULmmRIh5pKhe0ygfML5DUwWGWRL5LaB")
     req.set_form_data({
-      :auth_token => data[:token],
       :color => 'green',
       :message => data[:text],
       :notify => data[:notify] ? 1 : 0,
